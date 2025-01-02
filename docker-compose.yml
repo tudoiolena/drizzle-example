@@ -1,0 +1,87 @@
+version: "3"
+
+networks:
+  internal-local:
+  traefik-public:
+    external: true
+volumes:
+  db-data-local:
+
+services:
+  pgadmin-local:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_DISABLE_POSTFIX: "true"
+    labels:
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.enable=true
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      - traefik.http.routers.pgadmin-local-http.rule=Host(`${PGADMIN_DOMAIN}`)
+      - traefik.http.routers.pgadmin-local-http.entrypoints=http
+      - traefik.http.routers.pgadmin-local-http.middlewares=https-redirect
+      - traefik.http.routers.pgadmin-local-https.rule=Host(`${PGADMIN_DOMAIN}`)
+      - traefik.http.routers.pgadmin-local-https.entrypoints=https
+      - traefik.http.routers.pgadmin-local-https.tls=true
+      - traefik.http.services.pgadmin-local.loadbalancer.server.port=80
+    networks:
+      - traefik-public
+      - internal-local
+
+  db-local:
+    container_name: db
+    image: postgres:16.2-bullseye
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    labels:
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.enable=false
+    volumes:
+      - db-data-local:/var/lib/postgresql/data/
+    networks:
+      - internal-local
+
+  remix:
+    container_name: remix
+    restart: unless-stopped
+    user: ${UID}:${GID}
+    build:
+      context: ./
+      dockerfile: ./docker-services/remix/Dockerfile
+      args:
+        - UID=${UID}
+        - GID=${GID}
+        - USER_NAME=${USER_NAME}
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./source:/app
+    labels:
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.enable=true
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      - traefik.http.routers.remix-http.rule=Host(`${REMIX_DOMAIN}`)
+      - traefik.http.routers.remix-http.entrypoints=http
+      - traefik.http.routers.remix-http.middlewares=https-redirect
+      - traefik.http.routers.remix-https.rule=Host(`${REMIX_DOMAIN}`)
+      - traefik.http.routers.remix-https.entrypoints=https
+      - traefik.http.routers.remix-https.tls=true
+      - traefik.http.services.remix.loadbalancer.server.port=3000
+    command:
+      - npm
+      - run
+      - dev
+    networks:
+      - internal-local
+      - traefik-public
