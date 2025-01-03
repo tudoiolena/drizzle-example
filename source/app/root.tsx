@@ -9,6 +9,10 @@ import {
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
+import i18next from "i18next";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import i18nConfig from "./config/i18n";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,8 +46,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+i18next.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <I18nextProvider i18n={i18next}>
+      <Outlet />
+    </I18nextProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
