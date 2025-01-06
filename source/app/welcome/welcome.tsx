@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { Button } from "~/components/Button";
+import { IconArrowLeft, IconWorldLatitude } from "@tabler/icons-react";
 
 export function Welcome() {
   const { t, i18n } = useTranslation("common");
@@ -14,6 +15,8 @@ export function Welcome() {
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
         <header className="flex flex-col items-center gap-9">
           <div className="flex gap-4">
+            <IconArrowLeft color="red" size={48} />
+            <IconWorldLatitude />
             <Button onClick={() => changeLanguage("uk")} type="button">
               Українська
             </Button>
