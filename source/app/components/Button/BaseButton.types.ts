@@ -5,4 +5,5 @@ export interface BaseButtonProps extends ButtonProps {
   children: ReactNode;
   type: "button" | "submit";
   onClick?: () => void;
+  isLoading?: boolean;
 }

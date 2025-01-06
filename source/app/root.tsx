@@ -55,7 +55,7 @@ i18next.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
 export default function App() {
   return (
     <I18nextProvider i18n={i18next}>
-      <MantineProvider defaultColorScheme="dark" /* theme={theme}*/>
+      <MantineProvider defaultColorScheme="light" /* theme={theme}*/>
         <Outlet />
       </MantineProvider>
     </I18nextProvider>
@@ -90,3 +90,12 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     </main>
   );
 }
+
+// export function HydrateFallback() {
+//   return (
+//     <div id="loading-splash">
+//       <div id="loading-splash-spinner" />
+//       <p>Loading, please wait...</p>
+//     </div>
+//   );
+// }
