@@ -13,6 +13,9 @@ import i18next from "i18next";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import i18nConfig from "./config/i18n";
 import LanguageDetector from "i18next-browser-languagedetector";
+import "@mantine/core/styles.css";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { theme } from "../theme";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,6 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <ColorSchemeScript />
       </head>
       <body>
         {children}
@@ -51,7 +55,9 @@ i18next.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
 export default function App() {
   return (
     <I18nextProvider i18n={i18next}>
-      <Outlet />
+      <MantineProvider defaultColorScheme="dark" /* theme={theme}*/>
+        <Outlet />
+      </MantineProvider>
     </I18nextProvider>
   );
 }
