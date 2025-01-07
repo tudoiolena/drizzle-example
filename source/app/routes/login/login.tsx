@@ -23,14 +23,14 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 
-// export const validator = withZod(
-//   z.object({
-//     email: z.string().email({ message: "Email required" }),
-//     password: z
-//       .string()
-//       .min(6, { message: "Password must be at least 6 characters" }),
-//   })
-// );
+export const validator = withZod(
+  z.object({
+    email: z.string().email({ message: "Email required" }),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+  })
+);
 
 export async function action({ request }: Route.ActionArgs) {
   let response: Response;
@@ -38,16 +38,22 @@ export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData();
     console.log("formData", formData);
 
-    // const validetedFormData = validator.validate(formData);
-    // console.log("validetedFormData", validetedFormData);
-    // const { email, password } = validetedFormData;
-    // console.log("email", email);
-    // console.log("password", password);
-    const email = formData.get("email")?.toString();
-    const password = formData.get("password")?.toString();
+    const validetedFormData = await validator.validate(formData);
+    console.log("validetedFormData", validetedFormData);
+    const { email, password } = validetedFormData.submittedData;
 
-    // Check the user's credentials
+    console.log("email", email);
+    console.log("password", password);
+
+    if (validetedFormData.error?.fieldErrors.email) {
+      throw new Error(validetedFormData.error.fieldErrors.email);
+    }
+    if (validetedFormData.error?.fieldErrors.password) {
+      throw new Error(validetedFormData.error.fieldErrors.password);
+    }
+
     if (!env.DEFAULT_ADMIN_EMAIL || !env.DEFAULT_ADMIN_PASSWORD) {
+      // Check the user's credentials
       throw new Error(
         "Environment variables DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD must be set."
       );
@@ -83,6 +89,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function Login({ actionData }: Route.ComponentProps) {
+  console.log("actionData", actionData?.error);
   return (
     <div className="p-8 min-w-3/4 w-96 m-auto">
       <h1 className="text-2xl text-center">Login</h1>
