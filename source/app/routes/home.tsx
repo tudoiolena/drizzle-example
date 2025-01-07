@@ -15,6 +15,7 @@ import { Form, Link, type MetaFunction } from "react-router";
 import { getUserId } from "~/services/session.server";
 import { redirect } from "react-router";
 import type { Route } from "./+types/home";
+import { Button } from "~/components/Button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -42,9 +43,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
           <div>
             <p className="mb-6">You are logged in {loaderData?.userId}</p>
             <Form action="/logout" method="post">
-              <button type="submit" className="border rounded px-2.5 py-1">
-                Logout
-              </button>
+              <Button type="submit">Logout</Button>
             </Form>
           </div>
         ) : (

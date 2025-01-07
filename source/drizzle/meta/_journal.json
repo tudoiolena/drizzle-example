@@ -8,6 +8,27 @@
       "when": 1735831926835,
       "tag": "0000_simple_misty_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1736239145562,
+      "tag": "0001_dark_strong_guy",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736239878798,
+      "tag": "0002_hesitant_metal_master",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736240564284,
+      "tag": "0003_add_indexes",
+      "breakpoints": true
     }
   ]
 }

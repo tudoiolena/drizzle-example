@@ -1,6 +1,6 @@
 {
-  "id": "0f4e4e54-4da6-4fcd-bd89-3a6be4b029fb",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ebbd8b5a-5608-4edd-9ab4-0786670fb682",
+  "prevId": "d7202ad8-87b7-4aac-9a91-ddef4cca59ab",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -25,23 +25,50 @@
             "cycle": false
           }
         },
-        "name": {
-          "name": "name",
+        "fullName": {
+          "name": "fullName",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
-        },
-        "age": {
-          "name": "age",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "email": {
           "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'admin'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deletedAt": {
+          "name": "deletedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -51,7 +78,9 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -59,7 +88,16 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "admin",
+        "staff"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

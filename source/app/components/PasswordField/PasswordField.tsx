@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import { useField } from "@rvf/react-router";
 import { PasswordInput } from "@mantine/core";
 import "@mantine/core/styles/PasswordInput.css";
@@ -13,9 +13,8 @@ export const PasswordField = ({
   name,
 }: StringFieldProps) => {
   // const field = useField(scope);
-  const inputId = useId();
-  const errorId = useId();
-
+  // const inputId = useId();
+  // const errorId = useId();
   return (
     <div>
       <PasswordInput
@@ -27,8 +26,8 @@ export const PasswordField = ({
         //   "aria-describedby": errorId,
         //   "aria-invalid": !!field.error(),
         // })}
-        size="md"
         // error={field.error()}
+        size="md"
         error={error}
         styles={{
           wrapper: { marginBottom: 2 },
